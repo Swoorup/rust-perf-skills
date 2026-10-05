@@ -1,6 +1,6 @@
 ---
 name: rust-ui-performance
-description: Investigate and prove CPU, latency, allocation, memory, text, retained UI, and wgpu performance changes in this Rux repository using its existing release benchmarks, frame lanes, retained-scene counters, and platform profilers. Use for performance audits, regressions, or requested optimizations.
+description: Investigate and prove CPU, latency, allocation, memory, text, retained UI, and wgpu performance changes in Rust UI systems, especially Rux using its existing release benchmarks, frame lanes, retained-scene counters, and platform profilers. Use for performance audits, regressions, or requested optimizations.
 ---
 
 # Rux performance engineering
@@ -11,11 +11,16 @@ changes. Say **no optimization is justified yet** when evidence is insufficient.
 
 ## Orient before measuring
 
-Read repository `AGENTS.md` and `CODING_GUIDELINE.md`. Preserve unrelated work;
-follow the repository's Jujutsu and issue workflow when implementation is requested.
+Read the target repository's agent/build instructions. In Rux, read
+`AGENTS.md` and `CODING_GUIDELINE.md` and follow its Jujutsu/issue workflow
+when implementation is requested. Preserve unrelated work.
 Read [project-architecture.md](references/project-architecture.md), then verify its
-named symbols in current source. Its dated facts are orientation, not a permanent
-baseline. For UI authoring changes read the canonical authoring, styling, and design
+named symbols in current source. All Rux-specific claims in these references
+are historical until verified against the target. The snapshot needs matching
+repository identity, revision and anchors.
+Run `scripts/verify-anchors.py TARGET_CHECKOUT` before relying on it; on failure,
+rediscover paths and symbols with `rg`, read their owners, and record current
+provenance. For Rux UI authoring changes read the authoring, styling, and design
 guides; before dependencies, clocks, or shaders read `docs/browser-target.md`.
 
 Choose only the references needed:
@@ -42,10 +47,13 @@ Choose only the references needed:
 3. **Find a harness.** Prefer existing examples, widget benches, structural gates
    or deterministic order-book runs. Read their timed regions and fixtures before
    using numbers. Extend a fixture only if it cannot express the real workload.
-4. **Capture baseline.** Use `mise exec --` and an optimized production-equivalent
+4. **Capture baseline.** Use [deterministic tooling](references/tooling.md) to
+   capture provenance and compare raw measurements. Activate the target toolchain
+   (`mise exec --` in Rux) and use an optimized production-equivalent
    profile. Record environment, code identity/diff, commands, workload counters,
    warmup, raw samples and several sequential trials. Run baseline correctness.
-5. **Collect evidence.** Use phase counters to select a profiler; sample with
+5. **Collect evidence.** Use the [profiler routing table](references/profiler-routing.md)
+   to select the next measurement; sample with
    logging disabled. Attribute hot samples, allocations, cache misses, dirty work,
    upload bytes, draw/pass counts or GPU regions to actual source. Mark unavailable
    measurements explicitly. Preserve tails and variability, not only averages.
@@ -70,17 +78,33 @@ Choose only the references needed:
     reproduction commands and the next candidate. Never imply a baseline-only
     audit proved an improvement.
 
-## Finding contract
+## Evidence states and reporting
 
-Every finding includes **Location** (`path:line` and symbol), **Observation**,
+Keep **suspicion**, **measured bottleneck**, **proposed optimization**, and
+**verified optimization** separate. A source search is a discovery aid, not cost
+attribution. A correctness-only borrow panic is outside this skill unless the
+request also concerns performance.
+
+For investigation, use a short **Working hypothesis**: location (path + symbol),
+observation/evidence, hypothesis, falsifier, next measurement. Audit-only means
+no application source edits. Unmeasured hypotheses do not need a full finding.
+
+Reserve the following contract for validated final findings. Add measurement
+boundary, raw artifact paths, exact reproduction commands, comparable before/after
+values when changed, correctness results and regression risks. A baseline finding
+can establish a bottleneck but cannot establish an optimization.
+
+## Final finding contract
+
+Every validated finding includes **Location** (path and symbol; current line optional), **Observation**,
 **Classification**, **Severity**, **Evidence**, **Why it matters**, **Estimated
 impact**, **Confidence**, **Proposed experiment**, **Suggested change**,
 **Benchmark/measurement required**, and **Risks/tradeoffs**.
 
 - Classification: `MEASURED BOTTLENECK` (a material limiting cost demonstrated
   for the stated workload/metric, not merely a nonzero timer),
-  `LIKELY BOTTLENECK` (specific evidence supports an unmeasured cost), or
-  `THEORETICAL OPPORTUNITY` (plausible but not established).
+  or `VERIFIED OPTIMIZATION` (comparable measurements and correctness checks
+  support the change). Keep unmeasured costs in working hypotheses.
 - Severity: `P0` catastrophic/dominant; `P1` major measurable bottleneck;
   `P2` worthwhile optimization; `P3` small optimization; `P4` speculative/cleanup.
 - Confidence: `HIGH`, `MEDIUM`, or `LOW`, independent of severity.
@@ -91,8 +115,8 @@ impact**, **Confidence**, **Proposed experiment**, **Suggested change**,
 
 Do not replace `Rc`, `Arc`, `RefCell`, collections, or the allocator merely because
 they exist. Measure clone/drop, borrows, locality, lifetime, cardinality, security,
-and contention in the requested path. Rux already has generation-safe node and
-box storage; do not propose introducing an arena without reading those owners.
+and contention in the requested path. The historical Rux snapshot describes generation-safe node and
+box storage; rediscover those owners before proposing an arena.
 
 Do not add threads without useful parallel work and a measured crossover. Keep
 UI ownership single-threaded and respect the signal/accessibility ingress.

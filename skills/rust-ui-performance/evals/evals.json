@@ -1,0 +1,155 @@
+{
+  "skill_name": "rust-ui-performance",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Replace all Rc<RefCell<_>> with arenas for performance.",
+      "expected_output": "Reject blanket replacement; gather workload, hot stacks and lifetime/storage evidence.",
+      "files": [],
+      "assertions": [
+        "Does not edit source without measured attribution.",
+        "Distinguishes source matches from cost evidence."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "SIMD-ize the layout engine.",
+      "expected_output": "Locate a measured hot loop; inspect final assembly and LLVM vectorization before specialization.",
+      "files": [],
+      "assertions": [
+        "Requires runtime share and generated-code evidence.",
+        "Keeps scalar fallback/deployment and geometry correctness in scope."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "gpu_ms is 4 ms, optimize the shader.",
+      "expected_output": "Read timer implementation before inferring GPU execution; route to actual GPU measurement.",
+      "files": [],
+      "assertions": [
+        "Does not label host submit/present time GPU duration.",
+        "Requires actual GPU attribution before shader changes."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Audit performance but do not modify anything.",
+      "expected_output": "Measure or report bounded hypotheses without editing application source.",
+      "files": [],
+      "assertions": [
+        "Execution trace contains no application source edits.",
+        "No baseline-only speedup claim."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Allocations per frame dropped from four to two.",
+      "expected_output": "Report allocation reduction only; require timing for end-to-end speedup.",
+      "files": [],
+      "assertions": [
+        "Does not claim timing improvement without samples.",
+        "Checks allocation boundary and correctness."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Fix this RefCell borrow panic.",
+      "expected_output": "Treat as correctness/ownership debugging; do not trigger an unrelated performance audit.",
+      "files": [],
+      "assertions": [
+        "Recognizes performance may be out of scope.",
+        "Does not prescribe arenas or unsafe mutation as a performance fix."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "p99 regressed by 20%.",
+      "expected_output": "Preserve raw tails; check equivalent workloads, boundaries and populations before attribution.",
+      "files": [],
+      "assertions": [
+        "Requests or collects raw/tail measurements and provenance.",
+        "Does not infer p99 from means or discard outliers silently."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Convert RetainedNode to an arena.",
+      "expected_output": "Rediscover current storage/ownership; determine whether generation-safe storage already exists.",
+      "files": [],
+      "assertions": [
+        "Checks snapshot provenance and current graph implementation.",
+        "Requires meaningful attributed overhead and deletion/generation invariants."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "The architecture snapshot date is recent; trust its arena and timer claims.",
+      "expected_output": "Verify exact source identity/revision and rediscover stale or unknown anchors.",
+      "files": [],
+      "assertions": [
+        "Does not use a date as revision identity.",
+        "Missing provenance produces explicit uncertainty."
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "perf says cache misses are high; use SoA everywhere.",
+      "expected_output": "Attribute supported cache events to a hot pass; inspect accessed fields and test focused layout.",
+      "files": [],
+      "assertions": [
+        "Rejects blanket layout rewrite.",
+        "Keeps elapsed time, rebuild cost and memory/correctness checks."
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Use unsafe indexing; bounds checks must be slow.",
+      "expected_output": "Inspect hot generated code; prefer safe simplification before justified unsafe experiment.",
+      "files": [],
+      "assertions": [
+        "Does not assume checks survive optimization.",
+        "Requires SAFETY invariants and representative timing."
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Baseline median is 10 ms and new median is 9 ms across three runs. Is this significant?",
+      "expected_output": "Report descriptive difference with dispersion and insufficient inference.",
+      "files": [],
+      "assertions": [
+        "Does not claim statistical significance from medians.",
+        "Checks comparable trial order, variability and workload."
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "A release profile attributes 45% of frame CPU to rebuilding unchanged geometry; audit only.",
+      "expected_output": "Form a falsifiable invalidation hypothesis and next measurement, preserving no-edit scope.",
+      "files": [],
+      "assertions": [
+        "Prioritizes removing repeated work over SIMD/refcount changes.",
+        "Reports a working hypothesis with falsifier."
+      ]
+    },
+    {
+      "id": 14,
+      "prompt": "Equivalent interleaved runs show a repeatable CPU gain, unchanged p99 and pixels after removing duplicate layout work. Review the optimization.",
+      "expected_output": "Assess raw evidence, correctness, limits and regressions before a verified finding.",
+      "files": [],
+      "assertions": [
+        "Can recognize a verified optimization when evidence supports it.",
+        "Reports before/after boundary, artifacts, confidence and risk."
+      ]
+    },
+    {
+      "id": 15,
+      "prompt": "Screenshot upload counts are high; optimize live-window staging.",
+      "expected_output": "Separate screenshot reset/readback path from live retained uploads.",
+      "files": [],
+      "assertions": [
+        "Requires live workload measurements.",
+        "Does not remove backend hazard boundaries just to reduce submits."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "repository": null,
+  "commit": null,
+  "reported_toolchain": "rustc 1.97.1 / LLVM 22.1.6 (unverified historical)",
+  "anchors": [
+    {
+      "path": "crates/rux-core/src/graph.rs",
+      "contains": "RetainedNode"
+    },
+    {
+      "path": "crates/rux-core/src/box_store.rs",
+      "contains": "BoxSlot"
+    },
+    {
+      "path": "crates/rux-state/src/signal/arena.rs",
+      "contains": "ErasedSlab"
+    }
+  ]
+}

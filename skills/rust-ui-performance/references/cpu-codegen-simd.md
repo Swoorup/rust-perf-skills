@@ -43,11 +43,11 @@ On Apple Silicon inspect ARM/NEON loads, arithmetic, conversions and scalar tail
 on x86 inspect the supported SSE/AVX variants. A memcpy/copy_from_slice may already
 use a tuned vector implementation. Measure realistic lengths/alignment, not only
 huge aligned arrays. A vector-width improvement may increase instruction/code
-size or hurt small cases. No SIMD change was justified by the validation audit.
+size or hurt small cases. The historical audit is not evidence for the current workload.
 
-`std::simd` availability is compiler-sensitive. A minimal probe on pinned 1.97.1
-failed E0658 (`portable_simd`) in this audit, despite current online std docs
-describing a newer release. Do not upgrade the toolchain or add nightly merely
+`std::simd` availability is compiler-sensitive. The inherited snapshot reports an E0658 (`portable_simd`) probe on 1.97.1;
+that probe is not reproducible here. Check the actual pinned compiler and run a
+minimal compile probe rather than assuming current stability from online docs. Do not upgrade the toolchain or add nightly merely
 to use it. `std::arch` is architecture-specific: any justified intrinsic design
 needs target gating/runtime dispatch where appropriate, scalar fallback,
 before/after tails, maintenance cost, and the unsafe allowlist/SAFETY invariants

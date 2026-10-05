@@ -1,0 +1,6 @@
+{
+  "name": "rust-perf-skills",
+  "version": "0.2.0",
+  "description": "Evidence-driven Rust UI systems-performance investigation with Rux architecture guidance.",
+  "skills": "./skills/"
+}

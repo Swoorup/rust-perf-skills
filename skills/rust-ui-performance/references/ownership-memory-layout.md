@@ -79,7 +79,9 @@ The warmed layout solver and routing benchmarks already assert zero allocations;
 fresh-scratch layout and cold mount legitimately allocate. GPU staging allocation
 counters are not necessarily underlying heap allocation calls.
 
-Inspect lock frequency/duration, contention and wake/drain throughput in
+For Mutex/RwLock, distinguish uncontended fast paths, reader/writer balance,
+writer starvation, hold duration, blocking and wake latency. A read-heavy source
+pattern alone does not justify RwLock. Inspect contention and wake/drain throughput in
 `signal/crossing.rs` rather than flagging every Mutex. Record producer fanout,
 coalesced messages, ordering and latency. Test cache-line bouncing/false sharing
 and atomic-order weakening only with a correctness argument. UI state remains

@@ -114,14 +114,12 @@ Compare instrumented/uninstrumented timing; zero without installation is not pro
 
 ## Platform profiling
 
-On macOS/Apple Silicon, use Instruments Time Profiler for CPU, Allocations for
-allocation sites, and Game Performance/Metal System Trace or GPU counters for
-submission, execution, display and resource lifetime. Build source-visible release
-artifacts with temporary `CARGO_PROFILE_RELEASE_DEBUG=line-tables-only` and
-`CARGO_PROFILE_RELEASE_STRIP=none`; retain optimization and pair identical settings.
-`xcrun xctrace list templates` discovers installed templates; use bounded record
-sessions and logging-disabled workloads. A sampled call tree establishes where
-time is spent; it does not measure the benefit of an unimplemented alternative.
+Use the [profiler routing table](profiler-routing.md) for macOS/Apple Silicon
+CPU, memory, control-flow and Metal questions, including unavailable-tool fallbacks.
+Build source-visible optimized artifacts with temporary
+`CARGO_PROFILE_RELEASE_DEBUG=line-tables-only` and
+`CARGO_PROFILE_RELEASE_STRIP=none`; keep identical settings in paired runs.
+A sampled call tree attributes time; it cannot prove an unimplemented alternative.
 
 On Linux (conditional, not available in this macOS audit), use `perf stat` for
 supported cycles/instructions/branches/cache events and `perf record`/flamegraph
